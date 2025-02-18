@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('pelanggans', function (Blueprint $table) {
             $table->id();
+            $table->string('nama', 100);
+            $table->string('email', 100)->unique();
+            $table->string('password');
+            $table->text('alamat');
+            $table->string('telepon', 20);
             $table->timestamps();
         });
     }
