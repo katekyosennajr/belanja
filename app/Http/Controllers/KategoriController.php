@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kategori;
 use Illuminate\Http\Request;
 
 class KategoriController extends Controller
@@ -11,7 +12,8 @@ class KategoriController extends Controller
      */
     public function index()
     {
-        //
+        $kategoris = Kategori::all();
+        return view('kategori.index', compact('kategoris'));
     }
 
     /**
@@ -19,7 +21,7 @@ class KategoriController extends Controller
      */
     public function create()
     {
-        //
+        return view('kategori.create');
     }
 
     /**
@@ -27,7 +29,13 @@ class KategoriController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'nama' => 'required|max:100'
+        ]);
+
+        Kategori::create($request->all());
+        return redirect()->route('kategori.index')
+            ->with('success', 'Kategori berhasil ditambahkan.');
     }
 
     /**
@@ -41,24 +49,32 @@ class KategoriController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Kategori $kategori)
     {
-        //
+        return view('kategori.edit', compact('kategori'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Kategori $kategori)
     {
-        //
+        $request->validate([
+            'nama' => 'required|max:100'
+        ]);
+
+        $kategori->update($request->all());
+        return redirect()->route('kategori.index')
+            ->with('success', 'Kategori berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Kategori $kategori)
     {
-        //
+        $kategori->delete();
+        return redirect()->route('kategori.index')
+            ->with('success', 'Kategori berhasil dihapus.');
     }
 }
