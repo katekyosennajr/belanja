@@ -18,9 +18,12 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'nama',
         'email',
         'password',
+        'alamat',
+        'telepon',
+        'is_admin'
     ];
 
     /**
@@ -40,6 +43,28 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'is_admin' => 'boolean',
     ];
+
+    public function cartItems()
+    {
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function pesanans()
+    {
+        return $this->hasMany(Pesanan::class);
+    }
+
+    public function getCartCountAttribute()
+    {
+        return $this->cartItems()->sum('jumlah');
+    }
+
+    public function getCartTotalAttribute()
+    {
+        return $this->cartItems->sum(function ($item) {
+            return $item->produk->harga * $item->jumlah;
+        });
+    }
 }
