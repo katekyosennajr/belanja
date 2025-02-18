@@ -8,6 +8,7 @@ use App\Http\Controllers\PesananController;
 use App\Http\Controllers\DetailPesananController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\CheckoutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,12 +35,19 @@ Route::group(['middleware' => 'auth'], function() {
     Route::post('/cart/add/{produk}', [CartController::class, 'add'])->name('cart.add');
     Route::put('/cart/update/{produk}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/remove/{produk}', [CartController::class, 'remove'])->name('cart.remove');
-    
+    Route::get('/cart/validate', [CartController::class, 'validate'])->name('cart.validate');
     // Checkout dan Pesanan
     Route::get('/checkout', [PesananController::class, 'checkout'])->name('checkout');
     Route::post('/checkout/process', [PesananController::class, 'process'])->name('checkout.process');
     Route::get('/orders', [PesananController::class, 'userOrders'])->name('user.orders');
     Route::get('/orders/{pesanan}', [PesananController::class, 'userOrderDetail'])->name('user.orders.detail');
+    Route::get('/pesanan/{pesanan}/konfirmasi', [PesananController::class, 'konfirmasi'])->name('pesanan.konfirmasi');
+});
+
+// Checkout routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    Route::post('/checkout/process', [CheckoutController::class, 'process'])->name('checkout.process');
 });
 
 // Admin Routes

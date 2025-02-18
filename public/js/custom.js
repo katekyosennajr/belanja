@@ -189,6 +189,40 @@ const setupSearchAutocomplete = (inputId, resultsId, searchUrl) => {
     }
 };
 
+// Validasi stok sebelum checkout
+document.addEventListener('DOMContentLoaded', () => {
+    $('#checkoutForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        $.ajax({
+            url: '/cart/validate',
+            method: 'GET',
+            success: function(response) {
+                if (response.valid) {
+                    $('#checkoutForm')[0].submit();
+                } else {
+                    Swal.fire({
+                        title: 'Perhatian!',
+                        text: 'Beberapa produk tidak memiliki stok yang cukup. Silakan periksa keranjang Anda.',
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = '/cart';
+                    });
+                }
+            },
+            error: function() {
+                Swal.fire({
+                    title: 'Error!',
+                    text: 'Terjadi kesalahan. Silakan coba lagi.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    });
+});
+
 // Initialize Components
 document.addEventListener('DOMContentLoaded', () => {
     // Setup image previews

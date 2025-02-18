@@ -120,4 +120,21 @@ class CartController extends Controller
             'count' => CartItem::where('user_id', Auth::id())->sum('jumlah')
         ]);
     }
+
+    public function validate()
+    {
+        $cartItems = CartItem::where('user_id', auth()->id())
+            ->with('produk')
+            ->get();
+
+        $valid = true;
+        foreach ($cartItems as $item) {
+            if ($item->jumlah > $item->produk->stok) {
+                $valid = false;
+                break;
+            }
+        }
+
+        return response()->json(['valid' => $valid]);
+    }
 }

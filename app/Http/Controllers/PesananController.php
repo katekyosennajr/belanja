@@ -121,4 +121,14 @@ class PesananController extends Controller
                 ->with('error', 'Terjadi kesalahan saat menghapus pesanan.');
         }
     }
+
+    public function konfirmasi(Pesanan $pesanan)
+    {
+        // Pastikan user hanya bisa melihat pesanan miliknya
+        if ($pesanan->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        return view('pesanan.konfirmasi', compact('pesanan'));
+    }
 }
