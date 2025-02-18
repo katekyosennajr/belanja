@@ -28,6 +28,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Health check route
+Route::get('/health', function () {
+    return response()->json(['status' => 'healthy']);
+});
+
 // Admin Routes
 Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function() {
     // Dashboard
