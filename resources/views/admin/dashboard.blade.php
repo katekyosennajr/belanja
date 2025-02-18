@@ -1,134 +1,211 @@
-@extends('layouts.admin')
+@extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard Admin')
 
 @section('content')
-<div class="row">
-    <!-- Statistik -->
-    <div class="col-md-3 mb-4">
-        <div class="card bg-primary text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title mb-0">Total Pesanan</h6>
-                        <h2 class="mb-0">{{ $totalPesanan }}</h2>
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Pelanggan</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ $stats['total_pelanggan'] }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                                <i class="fas fa-users text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
                     </div>
-                    <i class="fas fa-shopping-cart fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Produk</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ $stats['total_produk'] }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md">
+                                <i class="fas fa-box text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Pesanan Pending</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ $stats['pesanan_pending'] }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-warning shadow text-center border-radius-md">
+                                <i class="fas fa-clock text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-sm-6 mb-4">
+            <div class="card">
+                <div class="card-body p-3">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="numbers">
+                                <p class="text-sm mb-0 text-uppercase font-weight-bold">Pesanan Selesai</p>
+                                <h5 class="font-weight-bolder mb-0">
+                                    {{ $stats['pesanan_selesai'] }}
+                                </h5>
+                            </div>
+                        </div>
+                        <div class="col-4 text-end">
+                            <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md">
+                                <i class="fas fa-check text-lg opacity-10" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="col-md-3 mb-4">
-        <div class="card bg-success text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title mb-0">Total Produk</h6>
-                        <h2 class="mb-0">{{ $totalProduk }}</h2>
+    <div class="row mt-4">
+        <div class="col-lg-7 mb-4">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h6>Pesanan Terbaru</h6>
+                </div>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Pelanggan</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Total</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Status</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($pesanan_terbaru as $pesanan)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-3 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm">{{ $pesanan->user->name }}</h6>
+                                                <p class="text-xs text-secondary mb-0">{{ $pesanan->user->email }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <p class="text-sm font-weight-bold mb-0">Rp {{ number_format($pesanan->total, 0, ',', '.') }}</p>
+                                    </td>
+                                    <td class="align-middle text-center text-sm">
+                                        <span class="badge badge-sm bg-gradient-{{ $pesanan->status == 'pending' ? 'warning' : ($pesanan->status == 'proses' ? 'info' : 'success') }}">
+                                            {{ ucfirst($pesanan->status) }}
+                                        </span>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">{{ $pesanan->created_at->format('d/m/Y H:i') }}</span>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                    <i class="fas fa-box fa-2x"></i>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="col-md-3 mb-4">
-        <div class="card bg-info text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title mb-0">Total Pelanggan</h6>
-                        <h2 class="mb-0">{{ $totalPelanggan }}</h2>
-                    </div>
-                    <i class="fas fa-users fa-2x"></i>
+        <div class="col-lg-5 mb-4">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <h6>Produk Stok Menipis</h6>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3 mb-4">
-        <div class="card bg-warning text-white">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div>
-                        <h6 class="card-title mb-0">Pendapatan</h6>
-                        <h2 class="mb-0">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</h2>
-                    </div>
-                    <i class="fas fa-money-bill-wave fa-2x"></i>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pesanan Terbaru -->
-    <div class="col-md-8 mb-4">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5 class="card-title mb-0">Pesanan Terbaru</h5>
-                    <a href="{{ route('pesanans.index') }}" class="btn btn-sm btn-primary">Lihat Semua</a>
-                </div>
-
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Pelanggan</th>
-                                <th>Total</th>
-                                <th>Status</th>
-                                <th>Tanggal</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($pesananTerbaru as $pesanan)
-                            <tr>
-                                <td>#{{ $pesanan->id }}</td>
-                                <td>{{ $pesanan->pelanggan->nama }}</td>
-                                <td>Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</td>
-                                <td>
-                                    @if($pesanan->status == 'pending')
-                                        <span class="badge bg-warning">Pending</span>
-                                    @elseif($pesanan->status == 'processing')
-                                        <span class="badge bg-info">Diproses</span>
-                                    @elseif($pesanan->status == 'shipped')
-                                        <span class="badge bg-primary">Dikirim</span>
-                                    @elseif($pesanan->status == 'completed')
-                                        <span class="badge bg-success">Selesai</span>
-                                    @else
-                                        <span class="badge bg-danger">Dibatalkan</span>
-                                    @endif
-                                </td>
-                                <td>{{ $pesanan->created_at->format('d M Y H:i') }}</td>
-                            </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Produk Terlaris -->
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title mb-4">Produk Terlaris</h5>
-
-                @foreach($produkTerlaris as $produk)
-                <div class="d-flex align-items-center mb-3">
-                    <img src="{{ asset('storage/' . $produk->gambar) }}" 
-                         class="rounded" alt="{{ $produk->nama }}"
-                         style="width: 50px; height: 50px; object-fit: cover;">
-                    <div class="ms-3">
-                        <h6 class="mb-0">{{ $produk->nama }}</h6>
-                        <small class="text-muted">{{ $produk->total_terjual }} terjual</small>
+                <div class="card-body px-0 pt-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Produk</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stok</th>
+                                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($stok_menipis as $produk)
+                                <tr>
+                                    <td>
+                                        <div class="d-flex px-3 py-1">
+                                            <div class="d-flex flex-column justify-content-center">
+                                                <h6 class="mb-0 text-sm">{{ $produk->nama }}</h6>
+                                                <p class="text-xs text-secondary mb-0">{{ $produk->kategori->nama }}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <span class="text-secondary text-xs font-weight-bold">{{ $produk->stok }}</span>
+                                    </td>
+                                    <td class="align-middle text-center">
+                                        <a href="{{ route('admin.produk.edit', $produk->id) }}" class="btn btn-sm btn-info">
+                                            Update Stok
+                                        </a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                @endforeach
             </div>
         </div>
     </div>
 </div>
 @endsection
+
+@push('styles')
+<style>
+.icon-shape {
+    width: 48px;
+    height: 48px;
+    background-position: center;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bg-gradient-primary {
+    background: linear-gradient(310deg, #7928CA, #FF0080);
+}
+.bg-gradient-success {
+    background: linear-gradient(310deg, #17ad37, #98ec2d);
+}
+.bg-gradient-warning {
+    background: linear-gradient(310deg, #f53939, #fbcf33);
+}
+.border-radius-md {
+    border-radius: 0.5rem;
+}
+</style>
+@endpush

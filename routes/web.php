@@ -28,4 +28,25 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// Admin Routes
+Route::group(['prefix' => 'admin', 'middleware' => ['auth', 'admin']], function() {
+    // Dashboard
+    Route::get('/', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    
+    // Kategori
+    Route::resource('kategori', KategoriController::class);
+    
+    // Produk
+    Route::resource('produk', ProdukController::class);
+    
+    // Pesanan
+    Route::get('pesanan', [PesananController::class, 'adminIndex'])->name('admin.pesanan.index');
+    Route::get('pesanan/{pesanan}', [PesananController::class, 'adminShow'])->name('admin.pesanan.show');
+    Route::put('pesanan/{pesanan}/status', [PesananController::class, 'updateStatus'])->name('admin.pesanan.status');
+    
+    // Pelanggan
+    Route::get('pelanggan', [PelangganController::class, 'index'])->name('admin.pelanggan.index');
+    Route::get('pelanggan/{user}', [PelangganController::class, 'show'])->name('admin.pelanggan.show');
+});
+
 require __DIR__.'/auth.php';
